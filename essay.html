@@ -25,6 +25,17 @@
     <div class="essay-full-date" id="essayPageDate"></div>
     <img id="essayPageImage" class="essay-full-img" src="" alt="" style="display:none;" />
     <div class="essay-full-body" id="essayPageBody"></div>
+    <div class="essay-rating">
+      <div class="rating-header">
+        <span>Your position</span>
+        <span class="rating-value" id="essayPageRatingLabel"></span>
+      </div>
+      <div class="slider-row">
+        <span>Strongly disagree</span>
+        <input id="essayPageRating" class="rating-slider" type="range" min="0" max="10" step="1" value="5" />
+        <span>Strongly agree</span>
+      </div>
+    </div>
     <div class="related-essays">
       <p class="section-label">You may also like</p>
       <div class="related-essays-grid" id="relatedEssays"></div>

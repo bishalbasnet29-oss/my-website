@@ -96,6 +96,30 @@ const essays = [
   }
 ];
 
+function getRatingKey(type, index) {
+  return `rating_${type}_${index}`;
+}
+
+function loadRating(type, index) {
+  const value = localStorage.getItem(getRatingKey(type, index));
+  return value === null ? 5 : Number(value);
+}
+
+function saveRating(type, index, value) {
+  localStorage.setItem(getRatingKey(type, index), String(value));
+}
+
+function getRatingLabel(value) {
+  const n = Number(value);
+  if (n <= 1) return 'Strongly disagree';
+  if (n <= 3) return 'Disagree';
+  if (n <= 4) return 'Slightly disagree';
+  if (n === 5) return 'Neutral';
+  if (n <= 6) return 'Slightly agree';
+  if (n <= 8) return 'Agree';
+  return 'Strongly agree';
+}
+
 const themeToggle = document.getElementById('themeToggle');
 const navbar = document.getElementById('navbar');
 const ideaCount = document.getElementById('ideaCount');
@@ -110,6 +134,8 @@ const essayPageTitle = document.getElementById('essayPageTitle');
 const essayPageDate = document.getElementById('essayPageDate');
 const essayPageImage = document.getElementById('essayPageImage');
 const essayPageBody = document.getElementById('essayPageBody');
+const essayPageRating = document.getElementById('essayPageRating');
+const essayPageRatingLabel = document.getElementById('essayPageRatingLabel');
 const essayPageNotFound = document.getElementById('essayPageNotFound');
 const relatedEssaysGrid = document.getElementById('relatedEssays');
 
@@ -234,7 +260,20 @@ function renderEssayPage() {
     }
   }
 
+  initEssayPageRating(idx);
   renderRelatedEssays(idx);
+}
+
+function initEssayPageRating(idx) {
+  if (!essayPageRating || !essayPageRatingLabel) return;
+  const rating = loadRating('essay', idx);
+  essayPageRating.value = rating;
+  essayPageRatingLabel.textContent = getRatingLabel(rating);
+  essayPageRating.addEventListener('input', e => {
+    const value = e.target.value;
+    essayPageRatingLabel.textContent = getRatingLabel(value);
+    saveRating('essay', idx, value);
+  });
 }
 
 function renderRelatedEssays(currentIndex) {

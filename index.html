@@ -19,16 +19,19 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">☀️</button>
+    <div class="scroll-progress-bar">
+      <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+    </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero" id="home">
     <div class="hero-bg-text">Ideas</div>
     <div class="hero-content">
-      <div class="hero-tag">A personal collection</div>
-      <h1>Where <em>curious</em><br>ideas live.</h1>
-      <p class="hero-sub">A space to explore, catalogue, and share the concepts, questions, and half-baked theories that keep me up at night.</p>
-      <div class="hero-cta">
+      <div class="hero-tag reveal reveal-left">A personal collection</div>
+      <h1 class="reveal reveal-left">Where <em>curious</em><br>ideas live.</h1>
+      <p class="hero-sub reveal reveal-right">A space to explore, catalogue, and share the concepts, questions, and half-baked theories that keep me up at night.</p>
+      <div class="hero-cta reveal reveal-right">
         <a href="#ideas" class="btn btn-primary">Explore Ideas</a>
         <a href="#about" class="btn btn-ghost">About this space</a>
       </div>
@@ -41,9 +44,10 @@
 
   <!-- IDEAS -->
   <section id="ideas">
-    <p class="section-label reveal">The Collection</p>
-    <h2 class="section-title reveal">Ideas worth <em style="font-style:italic;color:var(--accent)">thinking about</em></h2>
-    <p class="section-sub reveal">Click any card to read more. Filter by category below.</p>
+    <p class="section-label reveal reveal-left">The Collection</p>
+    <div class="section-progress"><div class="section-progress-fill"></div></div>
+    <h2 class="section-title reveal reveal-right">Ideas worth <em style="font-style:italic;color:var(--accent)">thinking about</em></h2>
+    <p class="section-sub reveal reveal-left">Click any card to read more. Filter by category below.</p>
 
     <div class="filter-bar reveal">
       <button class="filter-btn active" data-filter="all">All</button>
@@ -66,6 +70,17 @@
       <div class="modal-tag" id="modalTag"></div>
       <div class="modal-title" id="modalTitle"></div>
       <div class="modal-body" id="modalBody"></div>
+      <div class="rating-block rating-hidden">
+        <div class="rating-header">
+          <span>Your position</span>
+          <span class="rating-value" id="ideaModalRatingLabel">Neutral</span>
+        </div>
+        <div class="slider-row">
+          <span>Strongly Disagree</span>
+          <input id="ideaModalRating" class="rating-slider" type="range" min="0" max="10" step="1" value="5" />
+          <span>Strongly Agree</span>
+        </div>
+      </div>
       <div class="modal-actions">
         <div class="modal-status" id="modalStatus"></div>
         <button class="share-btn" onclick="shareIdea()">↗ Share</button>
@@ -76,9 +91,10 @@
 
   <!-- ESSAYS / BLOG -->
   <section id="blog">
-    <p class="section-label reveal">Written thoughts</p>
-    <h2 class="section-title reveal">Essays &amp; <em style="font-style:italic;color:var(--accent)">reflections</em></h2>
-    <p class="section-sub reveal">Longer-form thinking on things that deserve more than a card.</p>
+    <p class="section-label reveal reveal-left">Written thoughts</p>
+    <div class="section-progress"><div class="section-progress-fill"></div></div>
+    <h2 class="section-title reveal reveal-right">Essays &amp; <em style="font-style:italic;color:var(--accent)">reflections</em></h2>
+    <p class="section-sub reveal reveal-left">Longer-form thinking on things that deserve more than a card.</p>
 
     <div class="essays-grid" id="essaysGrid">
       <!-- Essay cards are rendered by JS below. Add your essays to the `essays` array in the script. -->
@@ -103,12 +119,13 @@
       <div class="about-box box3">?</div>
     </div>
     <div>
-      <p class="section-label reveal">Who's behind this</p>
-      <h2 class="section-title reveal">A <em style="font-style:italic">mind</em><br>in motion.</h2>
-      <p class="section-sub reveal">
+      <p class="section-label reveal reveal-left">Who's behind this</p>
+      <div class="section-progress"><div class="section-progress-fill"></div></div>
+      <h2 class="section-title reveal reveal-right">A <em style="font-style:italic">mind</em><br>in motion.</h2>
+      <p class="section-sub reveal reveal-left">
         This is my personal corner of the internet — a living notebook of ideas across technology, society, science, and the human condition. Some are half-formed. Some might be wrong. All of them are worth exploring.
       </p>
-      <div class="about-stats reveal">
+      <div class="about-stats reveal reveal-right">
         <div class="stat">
           <div class="stat-num" id="ideaCount">6</div>
           <div class="stat-label">Ideas catalogued</div>
@@ -133,10 +150,11 @@
   <section id="contact">
     <div class="contact-wrap">
       <div>
-        <p class="section-label reveal">Get in touch</p>
-        <h2 class="section-title reveal">Have an idea?<br><em style="font-style:italic">Let's talk.</em></h2>
-        <p class="section-sub reveal">If something here sparked a thought, disagreement, or collaboration — I'd love to hear it.</p>
-        <div class="contact-info reveal">
+        <p class="section-label reveal reveal-left">Get in touch</p>
+        <div class="section-progress"><div class="section-progress-fill"></div></div>
+        <h2 class="section-title reveal reveal-right">Have an idea?<br><em style="font-style:italic">Let's talk.</em></h2>
+        <p class="section-sub reveal reveal-left">If something here sparked a thought, disagreement, or collaboration — I'd love to hear it.</p>
+        <div class="contact-info reveal reveal-right">
           <div class="info-item">
             <div class="info-label">Based in</div>
             <div class="info-value">Kathmandu, Nepal</div>
@@ -147,7 +165,7 @@
           </div>
         </div>
       </div>
-      <div class="reveal">
+      <div class="reveal reveal-right">
         <form class="contact-form" id="contactForm">
           <div class="form-row">
             <div class="form-group">
@@ -193,10 +211,419 @@
     <div>Built with curiosity &amp; plain HTML</div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // ═══════════════════════════════════════════════════
+    // ── IDEAS DATA ── Edit this to add/change your ideas!
+    // ═══════════════════════════════════════════════════
+    const ideas = [
+      {
+        title: "AI won't replace jobs — it'll replace tasks",
+        category: "technology",
+        tag: "Technology",
+        desc: "The conversation around AI and employment is misframed. It's not about entire roles disappearing overnight, but specific tasks within roles being automated — changing what work looks like.",
+        full: "We keep asking 'will AI take my job?' but that's the wrong question. History shows technology eliminates tasks, not jobs wholesale. The printing press didn't kill writers — it created the publishing industry. The real shift happening is that the cognitive tasks we once thought were exclusively human — pattern recognition, drafting, analysis — are now automatable. This means the value of distinctly human skills like judgment, ethics, creativity, and interpersonal trust will skyrocket. The future isn't human vs. machine. It's humans who know how to work with machines vs. those who don't.",
+        status: "Actively thinking about this"
+      },
+      {
+        title: "Cities are operating systems for human life",
+        category: "society",
+        tag: "Society",
+        desc: "A city is essentially an OS — with infrastructure as hardware, laws as the kernel, and culture as the user interface. Can we design better ones?",
+        full: "Think about it: a city has input/output systems (roads, water, power), processes running in the background (bureaucracy, economy), and a user interface that citizens interact with daily (public spaces, services, culture). Like software, cities can be forked — new cities built on different governance models. Like legacy code, old cities accumulate technical debt in the form of outdated infrastructure and laws. The most interesting urban experiments happening right now — charter cities, smart cities, 15-minute city planning — are essentially attempts to refactor the OS. What would a city built from scratch in 2025 look like?",
+        status: "Half-formed idea"
+      },
+      {
+        title: "The universe might be running out of interesting things to do",
+        category: "science",
+        tag: "Science",
+        desc: "Entropy isn't just a physics concept — it's the universe's long-term fate. But what does 'heat death' actually mean for complexity and life?",
+        full: "The second law of thermodynamics says entropy — disorder — always increases. Stars will burn out. Black holes will evaporate. Eventually, the universe reaches maximum entropy: heat death. A state of perfect, featureless equilibrium where nothing interesting can ever happen again. What's strange is that right now, we're in an extraordinarily rare pocket of low entropy — a temporary fluctuation that allows stars, planets, chemistry, biology, and consciousness to exist. We are the universe briefly organizing itself before the inevitable slide into disorder. That makes every moment of complexity — every thought, every conversation — cosmically improbable and precious.",
+        status: "Mind still blown"
+      },
+      {
+        title: "Is privacy a modern invention?",
+        category: "philosophy",
+        tag: "Philosophy",
+        desc: "Humans lived in small tribes for 200,000 years with no concept of personal privacy. Was it social media that killed privacy, or did we just briefly invent it?",
+        full: "For almost all of human evolutionary history, we lived in bands of 50–150 people. Everyone knew everything about everyone. There was no private space, no locked doors, no secret life. Privacy as we know it — a sphere of personal life shielded from others — is arguably a product of urbanization, the printing press, and Enlightenment philosophy. It peaked in the 20th century: your own room, unlisted phone numbers, sealed envelopes. Now the internet is pulling us back toward the tribal condition: everything visible, reputation public and permanent. Maybe the question isn't 'how do we protect privacy?' but 'did we ever really have it, and should we want it?'",
+        status: "Open question"
+      },
+      {
+        title: "Abundance is creating new forms of scarcity",
+        category: "society",
+        tag: "Society",
+        desc: "As material goods become cheaper, we're discovering that attention, trust, meaning, and quiet have become the scarce resources of modern life.",
+        full: "Capitalism is extraordinarily good at solving scarcity problems. Food, clothing, shelter, information — all dramatically cheaper and more accessible than a century ago. But abundance in one area creates scarcity in another. When everyone can publish, attention becomes scarce. When everyone is reachable, solitude becomes scarce. When information is infinite, wisdom and curation become scarce. When transactions are frictionless, trust becomes scarce. The most valuable things in modern life — deep focus, genuine human connection, trusted expertise, meaningful silence — are precisely the things our abundance economy has made rare. The luxuries of the future might be things we used to have for free.",
+        status: "Ongoing observation"
+      },
+      {
+        title: "Sleep is the last frontier of biological optimization",
+        category: "science",
+        tag: "Science",
+        desc: "We've optimized almost every waking hour. But we spend a third of our lives unconscious, and science is only beginning to understand why.",
+        full: "We've engineered nutrition, exercise, productivity, and social connection. But sleep remains stubbornly biological and un-hackable. We can't sleep in half the time. We can't bank it or loan it. Miss it and the consequences cascade through cognition, immune function, emotional regulation, and cellular repair. What's fascinating is how much happens during sleep: memories consolidate, the glymphatic system flushes neurotoxins, synaptic connections are pruned, creative connections are made. Some researchers believe dreaming is a kind of threat simulation or emotional processing. We're nowhere near understanding it fully — and yet it's the single behavior with the highest ROI for human performance. The most productive thing you might do today is go to bed on time.",
+        status: "Personal experiment ongoing"
+      }
+    ];
+
+    // ═══════════════════════════════════════════════════
+    // ── ESSAYS DATA ── Add your essays here!
+    //
+    // HOW TO ADD AN ESSAY:
+    // Copy one of the objects below, paste it after the last one
+    // (before the closing ]; ), and fill in your content.
+    //
+    // - title: the title of your essay
+    // - date: e.g. "May 2025"
+    // - preview: 2-3 sentence teaser shown on the card
+    // - image: path to an image file, or "" to skip it
+    // - body: your full essay as HTML — use <p> for paragraphs,
+    //         <h3> for subheadings, <blockquote> for quotes,
+    //         <img src="..." alt="..."> for images inside the essay
+    // ═══════════════════════════════════════════════════
+    const essays = [
+      {
+        title: "Why I started cataloguing ideas",
+        date: "April 2025",
+        preview: "I've always had too many thoughts and nowhere to put them. This is my attempt at building a second brain — or at least a tidy drawer for the messy ones.",
+        image: "",
+        body: `
+          <p>For as long as I can remember, ideas have arrived uninvited — in the shower, mid-conversation, at 2am when I should be sleeping. Most of them evaporated just as quickly. This website is my attempt to catch them before they do.</p>
+          <p>The act of writing an idea down forces you to actually think it through. You can't hide behind vague intuitions when you have to put them into sentences. Some of my best-sounding ideas have collapsed the moment I tried to write them out. That's a feature, not a bug.</p>
+          <blockquote>A thought unexpressed is a thought unexamined.</blockquote>
+          <p>I don't know where this project goes. Maybe it becomes a real blog. Maybe it stays a personal vault. Either way, it feels good to finally have a place to put these things.</p>
+        `
+      },
+      {
+        title: "On living in Kathmandu and thinking globally",
+        date: "March 2025",
+        preview: "There's something clarifying about being in a place the world often overlooks. Distance from the centre gives you a different kind of perspective.",
+        image: "",
+        body: `
+          <p>Kathmandu is one of those cities that doesn't make it into the global conversation very often — except when there's an earthquake, or a trekking disaster, or a political crisis. And yet it's one of the most intellectually alive places I've experienced.</p>
+          <p>Living somewhere that exists at the margins of global discourse has made me think harder about what "global" even means. Whose ideas circulate? Whose don't? What gets lost when knowledge flows only in one direction?</p>
+          <p>I don't have answers yet. But I think the question matters — especially now, when the internet was supposed to flatten everything and somehow hasn't.</p>
+        `
+      }
+    ];
+
+    function getRatingKey(type, index) {
+      return `rating_${type}_${index}`;
+    }
+
+    function loadRating(type, index) {
+      const value = localStorage.getItem(getRatingKey(type, index));
+      return value === null ? 5 : Number(value);
+    }
+
+    function saveRating(type, index, value) {
+      localStorage.setItem(getRatingKey(type, index), String(value));
+    }
+
+    function getRatingLabel(value) {
+      const n = Number(value);
+      if (n <= 1) return 'Strongly disagree';
+      if (n <= 3) return 'Disagree';
+      if (n <= 4) return 'Slightly disagree';
+      if (n === 5) return 'Neutral';
+      if (n <= 6) return 'Slightly agree';
+      if (n <= 8) return 'Agree';
+      return 'Strongly agree';
+    }
+
+    // ═══════════════════════════════════════════════════
+    // ── RATING HELPERS ──
+    // ═══════════════════════════════════════════════════
+    function getRatingKey(type, index) {
+      return `rating_${type}_${index}`;
+    }
+
+    function loadRating(type, index) {
+      const value = localStorage.getItem(getRatingKey(type, index));
+      return value === null ? 5 : Number(value);
+    }
+
+    function saveRating(type, index, value) {
+      localStorage.setItem(getRatingKey(type, index), String(value));
+    }
+
+    function getRatingLabel(value) {
+      const n = Number(value);
+      if (n <= 1) return 'Strongly disagree';
+      if (n <= 3) return 'Disagree';
+      if (n <= 4) return 'Slightly disagree';
+      if (n === 5) return 'Neutral';
+      if (n <= 6) return 'Slightly agree';
+      if (n <= 8) return 'Agree';
+      return 'Strongly agree';
+    }
+
+    function initIdeaModalRating(index) {
+      const input = document.getElementById('ideaModalRating');
+      const label = document.getElementById('ideaModalRatingLabel');
+      if (!input || !label) return;
+      const rating = loadRating('idea', index);
+      input.value = rating;
+      label.textContent = getRatingLabel(rating);
+      input.oninput = e => {
+        const value = e.target.value;
+        label.textContent = getRatingLabel(value);
+        saveRating('idea', index, value);
+      };
+    }
+
+    // ═══════════════════════════════════════════════════
+    // ── RENDER IDEAS ──
+    // ═══════════════════════════════════════════════════
+    const grid = document.getElementById('ideasGrid');
+    document.getElementById('ideaCount').textContent = ideas.length;
+
+    ideas.forEach((idea, i) => {
+      const card = document.createElement('div');
+      card.className = 'idea-card reveal';
+      card.dataset.category = idea.category;
+      card.innerHTML = `
+        <div class="card-tag">${idea.tag}</div>
+        <div class="card-title">${idea.title}</div>
+        <div class="card-desc">${idea.desc}</div>
+        <div class="card-arrow">→</div>
+      `;
+      card.addEventListener('click', () => openModal(idea, i));
+      grid.appendChild(card);
+    });
+
+    // ═══════════════════════════════════════════════════
+    // ── FILTER ──
+    // ═══════════════════════════════════════════════════
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.id === 'randomBtn') return;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          if (b.id !== 'randomBtn') b.classList.remove('active');
+        });
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.idea-card').forEach(card => {
+          card.classList.toggle('hidden', f !== 'all' && card.dataset.category !== f);
+        });
+      });
+    });
+
+    // ═══════════════════════════════════════════════════
+    // ── 🎲 RANDOM IDEA ──
+    // ═══════════════════════════════════════════════════
+    function openRandomIdea() {
+      const visibleCards = Array.from(document.querySelectorAll('.idea-card:not(.hidden)'));
+      if (visibleCards.length === 0) return;
+      const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+      randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => randomCard.click(), 400);
+    }
+
+    // ═══════════════════════════════════════════════════
+    // ── MODAL ──
+    // ═══════════════════════════════════════════════════
+    const overlay = document.getElementById('modalOverlay');
+    let currentIdea = null;
+
+    function openModal(idea, index) {
+      currentIdea = idea;
+      document.getElementById('modalTag').textContent = idea.tag;
+      document.getElementById('modalTitle').textContent = idea.title;
+      document.getElementById('modalBody').textContent = idea.full;
+      document.getElementById('modalStatus').textContent = idea.status;
+      document.getElementById('shareCopied').classList.remove('visible');
+      initIdeaModalRating(index);
+      const ratingBlock = document.querySelector('.modal .rating-block');
+      if (ratingBlock) ratingBlock.classList.remove('rating-hidden');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      overlay.classList.remove('open');
+      const ratingBlock = document.querySelector('.modal .rating-block');
+      if (ratingBlock) ratingBlock.classList.add('rating-hidden');
+      document.body.style.overflow = '';
+      currentIdea = null;
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+    // ═══════════════════════════════════════════════════
+    // ── 🔗 SHARE BUTTON ──
+    // ═══════════════════════════════════════════════════
+    function shareIdea() {
+      const url = window.location.href.split('#')[0] + '#ideas';
+      navigator.clipboard.writeText(url).then(() => {
+        const msg = document.getElementById('shareCopied');
+        msg.classList.add('visible');
+        setTimeout(() => msg.classList.remove('visible'), 2500);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════
+    // ── RENDER ESSAYS ──
+    // ═══════════════════════════════════════════════════
+    const essaysGrid = document.getElementById('essaysGrid');
+
+    essays.forEach((essay, i) => {
+      const card = document.createElement('div');
+      card.className = 'essay-card reveal';
+      const imgHtml = essay.image
+        ? `<img src="${essay.image}" alt="${essay.title}" class="essay-card-img">`
+        : `<div class="essay-card-img-placeholder">✦</div>`;
+      card.innerHTML = `
+        ${imgHtml}
+        <div class="essay-card-body">
+          <div class="essay-card-date">${essay.date}</div>
+          <div class="essay-card-title">${essay.title}</div>
+          <div class="essay-card-preview">${essay.preview}</div>
+          <button class="read-more-btn" onclick="openEssay(${i})">Read more →</button>
+        </div>
+      `;
+      essaysGrid.appendChild(card);
+    });
+
+    // ── ESSAY OPEN/CLOSE ──
+    const essayOverlay = document.getElementById('essayOverlay');
+
+    function openEssay(index) {
+      const essay = essays[index];
+      document.getElementById('essayFullDate').textContent = essay.date;
+      document.getElementById('essayFullTitle').textContent = essay.title;
+      document.getElementById('essayFullBody').innerHTML = essay.body;
+      essayOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      essayOverlay.scrollTop = 0;
+    }
+    function closeEssay() {
+      essayOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('essayClose').addEventListener('click', closeEssay);
+    essayOverlay.addEventListener('click', e => { if (e.target === essayOverlay) closeEssay(); });
+
+    // ═══════════════════════════════════════════════════
+    // ── 🌙 DARK / LIGHT MODE ──
+    // ═══════════════════════════════════════════════════
+    const themeToggle = document.getElementById('themeToggle');
+
+    function applyTheme(isDark) {
+      document.body.classList.toggle('light', !isDark);
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isCurrentlyDark = !document.body.classList.contains('light');
+      applyTheme(!isCurrentlyDark);
+      localStorage.setItem('theme', isCurrentlyDark ? 'light' : 'dark');
+    });
+
+    // Restore saved preference on load
+    const savedTheme = localStorage.getItem('theme');
+    applyTheme(savedTheme !== 'light');
+
+    // ═══════════════════════════════════════════════════
+    // ── NAVBAR SCROLL ──
+    // ═══════════════════════════════════════════════════
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ═══════════════════════════════════════════════════
+    // ── SCROLL PROGRESS & REVEAL ──
+    // ═══════════════════════════════════════════════════
+    const scrollProgressFill = document.getElementById('scrollProgressFill');
+    const sectionElements = document.querySelectorAll('section');
+
+    function updateScrollProgress() {
+      if (!scrollProgressFill) return;
+      const scrollTop = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = maxScroll > 0 ? (scrollTop / maxScroll) * 100 : 0;
+      scrollProgressFill.style.width = `${percent}%`;
+    }
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
+
+    const sectionProgressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const progressFill = entry.target.querySelector('.section-progress-fill');
+        if (!progressFill) return;
+        if (entry.isIntersecting) {
+          progressFill.style.width = '100%';
+        } else if (entry.intersectionRatio === 0) {
+          progressFill.style.width = '0';
+        }
+      });
+    }, { threshold: 0.2 });
+
+    sectionElements.forEach(section => sectionProgressObserver.observe(section));
+    updateScrollProgress();
+    window.addEventListener('scroll', updateScrollProgress);
+
+    // ── Observe essay cards added after DOMContentLoaded ──
+    const essayCardObserver = new MutationObserver(() => {
+      document.querySelectorAll('.essay-card.reveal:not(.observed)').forEach(el => {
+        el.classList.add('observed');
+        revealObserver.observe(el);
+      });
+    });
+    essayCardObserver.observe(essaysGrid, { childList: true });
+
+    // ── ESC key closes overlays ──
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeModal(); closeEssay(); }
+    });
+
+    // ═══════════════════════════════════════════════════
+    // ── CONTACT FORM ──
+    // ═══════════════════════════════════════════════════
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('fname').value.trim();
+      const email = document.getElementById('femail').value.trim();
+      if (!name || !email) { alert('Please fill in your name and email.'); return; }
+
+      const btn = this.querySelector('button[type="submit"]');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      const formData = {
+        name,
+        email,
+        topic: document.getElementById('ftopic').value,
+        message: document.getElementById('fmessage').value,
+        private: document.getElementById('fprivate').checked ? 'Yes — keep private' : 'No — can be shared'
+      };
+
+      try {
+        await fetch('https://formspree.io/f/mojrearv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        document.getElementById('formSuccess').style.display = 'block';
+        this.reset();
+        setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+      } catch {
+        alert('Something went wrong. Please try again.');
+      }
+
+      btn.textContent = 'Send Message →';
+      btn.disabled = false;
+    });
+  </script>
 
 </body>
 </html>
-
-
-
