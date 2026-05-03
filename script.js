@@ -136,6 +136,9 @@ const essayPageImage = document.getElementById('essayPageImage');
 const essayPageBody = document.getElementById('essayPageBody');
 const essayPageRating = document.getElementById('essayPageRating');
 const essayPageRatingLabel = document.getElementById('essayPageRatingLabel');
+const essayPageRatingSubmit = document.getElementById('essayPageRatingSubmit');
+const essayPageEmail = document.getElementById('essayPageEmail');
+const essayPageSubmitMessage = document.getElementById('essayPageSubmitMessage');
 const essayPageNotFound = document.getElementById('essayPageNotFound');
 const relatedEssaysGrid = document.getElementById('relatedEssays');
 
@@ -269,11 +272,53 @@ function initEssayPageRating(idx) {
   const rating = loadRating('essay', idx);
   essayPageRating.value = rating;
   essayPageRatingLabel.textContent = getRatingLabel(rating);
-  essayPageRating.addEventListener('input', e => {
+  if (essayPageEmail) essayPageEmail.value = '';
+  if (essayPageSubmitMessage) essayPageSubmitMessage.textContent = '';
+  essayPageRating.oninput = e => {
     const value = e.target.value;
     essayPageRatingLabel.textContent = getRatingLabel(value);
     saveRating('essay', idx, value);
-  });
+  };
+}
+
+async function submitEssayRating() {
+  if (!essayPageRating || !essayPageRatingSubmit) return;
+  const rating = essayPageRating.value;
+  const messageEl = essayPageSubmitMessage;
+  const email = essayPageEmail?.value.trim() || '';
+  if (rating === '' || rating === null || rating === undefined) {
+    if (messageEl) messageEl.textContent = 'Please choose a rating before submitting.';
+    return;
+  }
+  const label = getRatingLabel(rating);
+  const idx = getEssayIndexFromUrl();
+  const essay = essays[idx] || {};
+  essayPageRatingSubmit.textContent = 'Sending...';
+  essayPageRatingSubmit.disabled = true;
+  if (messageEl) messageEl.textContent = '';
+
+  const formData = {
+    email: email || 'no-reply@ideavault.com',
+    _replyto: email || 'no-reply@ideavault.com',
+    name: essay.title || 'Essay rating',
+    topic: `Essay rating: ${essay.title || 'Unknown'}`,
+    message: `Rating: ${rating} (${label})\nEssay: ${essay.title || 'Unknown'}\nDate: ${essay.date || 'Unknown'}\nEmail: ${email || 'Not provided'}`,
+    private: 'Essay rating submission'
+  };
+
+  try {
+    await fetch('https://formspree.io/f/mojrearv', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    if (messageEl) messageEl.textContent = 'Rating sent — thank you!';
+  } catch {
+    if (messageEl) messageEl.textContent = 'Unable to send rating. Please try again.';
+  }
+
+  essayPageRatingSubmit.textContent = 'Submit rating';
+  essayPageRatingSubmit.disabled = false;
 }
 
 function renderRelatedEssays(currentIndex) {
@@ -424,6 +469,10 @@ if (essaysGrid) {
 
 if (essayPageTitle) {
   renderEssayPage();
+}
+
+if (essayPageRatingSubmit) {
+  essayPageRatingSubmit.addEventListener('click', submitEssayRating);
 }
 
 if (modalClose) {

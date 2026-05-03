@@ -26,7 +26,6 @@
 
   <!-- HERO -->
   <section class="hero" id="home">
-    <div class="hero-bg-text">Ideas</div>
     <div class="hero-content">
       <div class="hero-tag reveal reveal-left">A personal collection</div>
       <h1 class="reveal reveal-left">Where <em>curious</em><br>ideas live.</h1>
@@ -390,7 +389,7 @@
       if (!ratingInput || !submitBtn) return;
 
       const rating = ratingInput.value;
-      if (!rating) {
+      if (rating === '' || rating === null || rating === undefined) {
         if (submitMessage) submitMessage.textContent = 'Please choose a rating before submitting.';
         submitBtn.textContent = 'Submit rating';
         submitBtn.disabled = false;

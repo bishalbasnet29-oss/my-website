@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="essay-page-background">
   <nav id="navbar">
     <a href="index.html" class="nav-logo">The Idea Vault</a>
     <ul class="nav-links">
@@ -30,11 +30,17 @@
         <span>Your position</span>
         <span class="rating-value" id="essayPageRatingLabel"></span>
       </div>
+      <div class="rating-feedback-label">Rating feedback</div>
       <div class="slider-row">
         <span>Strongly disagree</span>
-        <input id="essayPageRating" class="rating-slider" type="range" min="0" max="10" step="1" value="5" />
         <span>Strongly agree</span>
       </div>
+      <div class="rating-controls">
+        <input id="essayPageRating" class="rating-slider" type="range" min="0" max="10" step="1" value="5" />
+        <button id="essayPageRatingSubmit" type="button" class="btn btn-primary btn-small">Submit rating</button>
+      </div>
+      <input id="essayPageEmail" class="rating-email" type="email" placeholder="Your email for notification (optional)" />
+      <div class="rating-submit-message" id="essayPageSubmitMessage"></div>
     </div>
     <div class="related-essays">
       <p class="section-label">You may also like</p>
