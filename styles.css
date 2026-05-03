@@ -377,6 +377,44 @@ section { padding: 6rem 3rem; }
   display: grid;
   gap: 0.75rem;
 }
+.rating-controls {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+.rating-feedback-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 0.7rem;
+}
+.rating-controls .rating-slider {
+  flex: 1;
+  min-width: 220px;
+}
+.btn-small {
+  padding: 0.85rem 1rem;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.rating-email {
+  width: 100%;
+  margin-top: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.95rem 1rem;
+  font-size: 0.9rem;
+}
+.rating-submit-message {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
 .slider-row span {
   display: block;
   font-size: 0.72rem;

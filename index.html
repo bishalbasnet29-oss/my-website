@@ -75,11 +75,17 @@
           <span>Your position</span>
           <span class="rating-value" id="ideaModalRatingLabel">Neutral</span>
         </div>
+        <div class="rating-feedback-label">Rating feedback</div>
         <div class="slider-row">
           <span>Strongly Disagree</span>
-          <input id="ideaModalRating" class="rating-slider" type="range" min="0" max="10" step="1" value="5" />
           <span>Strongly Agree</span>
         </div>
+        <div class="rating-controls">
+          <input id="ideaModalRating" class="rating-slider" type="range" min="0" max="10" step="1" value="5" required />
+          <button id="ideaRatingSubmit" type="button" class="btn btn-primary btn-small">Submit rating</button>
+        </div>
+        <input id="ideaModalEmail" class="rating-email" type="email" placeholder="Your email for notification (optional)" />
+        <div class="rating-submit-message" id="ideaRatingSubmitMessage"></div>
       </div>
       <div class="modal-actions">
         <div class="modal-status" id="modalStatus"></div>
@@ -361,16 +367,69 @@
     function initIdeaModalRating(index) {
       const input = document.getElementById('ideaModalRating');
       const label = document.getElementById('ideaModalRatingLabel');
+      const emailInput = document.getElementById('ideaModalEmail');
+      const submitMessage = document.getElementById('ideaRatingSubmitMessage');
       if (!input || !label) return;
       const rating = loadRating('idea', index);
       input.value = rating;
       label.textContent = getRatingLabel(rating);
+      if (emailInput) emailInput.value = '';
+      if (submitMessage) submitMessage.textContent = '';
       input.oninput = e => {
         const value = e.target.value;
         label.textContent = getRatingLabel(value);
         saveRating('idea', index, value);
       };
     }
+
+    async function submitIdeaRating() {
+      const emailInput = document.getElementById('ideaModalEmail');
+      const ratingInput = document.getElementById('ideaModalRating');
+      const submitMessage = document.getElementById('ideaRatingSubmitMessage');
+      const submitBtn = document.getElementById('ideaRatingSubmit');
+      if (!ratingInput || !submitBtn) return;
+
+      const rating = ratingInput.value;
+      if (!rating) {
+        if (submitMessage) submitMessage.textContent = 'Please choose a rating before submitting.';
+        submitBtn.textContent = 'Submit rating';
+        submitBtn.disabled = false;
+        return;
+      }
+      const label = getRatingLabel(rating);
+      const ideaTitle = currentIdea?.title || 'Unknown idea';
+      const ideaCategory = currentIdea?.category || 'Unknown';
+      const email = emailInput?.value.trim() || '';
+
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+      if (submitMessage) submitMessage.textContent = '';
+
+      const formData = {
+        email: email || 'no-reply@ideavault.com',
+        _replyto: email || 'no-reply@ideavault.com',
+        name: ideaTitle,
+        topic: `Idea rating: ${ideaTitle}`,
+        message: `Rating: ${rating} (${label})\nIdea: ${ideaTitle}\nCategory: ${ideaCategory}\nEmail: ${email || 'Not provided'}`,
+        private: 'Rating submission from idea modal'
+      };
+
+      try {
+        await fetch('https://formspree.io/f/mojrearv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        if (submitMessage) submitMessage.textContent = 'Rating sent — thank you!';
+      } catch {
+        if (submitMessage) submitMessage.textContent = 'Unable to send rating. Please try again.';
+      }
+
+      submitBtn.textContent = 'Submit rating';
+      submitBtn.disabled = false;
+    }
+
+    document.getElementById('ideaRatingSubmit')?.addEventListener('click', submitIdeaRating);
 
     // ═══════════════════════════════════════════════════
     // ── RENDER IDEAS ──
@@ -425,9 +484,11 @@
     // ═══════════════════════════════════════════════════
     const overlay = document.getElementById('modalOverlay');
     let currentIdea = null;
+    let currentIdeaIndex = null;
 
     function openModal(idea, index) {
       currentIdea = idea;
+      currentIdeaIndex = index;
       document.getElementById('modalTag').textContent = idea.tag;
       document.getElementById('modalTitle').textContent = idea.title;
       document.getElementById('modalBody').textContent = idea.full;
@@ -445,6 +506,7 @@
       if (ratingBlock) ratingBlock.classList.add('rating-hidden');
       document.body.style.overflow = '';
       currentIdea = null;
+      currentIdeaIndex = null;
     }
     document.getElementById('modalClose').addEventListener('click', closeModal);
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
