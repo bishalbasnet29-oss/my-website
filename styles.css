@@ -15,17 +15,17 @@
 
 /* ── LIGHT MODE ── */
 body.light {
-  --bg: #fafaf7;
-  --surface: #f0ede6;
-  --border: #d8d4cc;
-  --accent: #5a7a00;
-  --accent2: #c07a00;
-  --text: #1a1a18;
-  --muted: #666;
+  --bg: #f2efe8;
+  --surface: #e8e2d7;
+  --border: #d3c9ba;
+  --accent: #6a7a2d;
+  --accent2: #b27a14;
+  --text: #27221c;
+  --muted: #5e554d;
 }
-body.light .nav-logo { color: var(--accent); }
-body.light nav.scrolled { background: rgba(250,250,247,0.9); }
-body.light .idea-card:hover { background: #e8e4dc; }
+body.light .nav-logo { color: var(--accent); text-decoration: none; }
+body.light nav.scrolled { background: rgba(242,239,232,0.9); }
+body.light .idea-card:hover { background: #ebe5da; }
 body.light .hero-bg-text { -webkit-text-stroke: 1px #d0ccbf; }
 body.light .modal { background: var(--surface); }
 body.light .modal-overlay { background: rgba(0,0,0,0.5); }
