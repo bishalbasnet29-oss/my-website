@@ -540,7 +540,7 @@
           <div class="essay-card-date">${essay.date}</div>
           <div class="essay-card-title">${essay.title}</div>
           <div class="essay-card-preview">${essay.preview}</div>
-          <button class="read-more-btn" onclick="openEssay(${i})">Read more →</button>
+          <a href="essay.html?index=${i}" class="read-more-btn">Read more →</a>
         </div>
       `;
       essaysGrid.appendChild(card);
