@@ -675,7 +675,13 @@
             <label>Message</label>
             <textarea rows="4" placeholder="Share your thought..." id="fmessage"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Send Message →</button>
+          <div class="form-group" style="flex-direction:row; align-items:center; gap:0.8rem;">
+  <input type="checkbox" id="fprivate" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;">
+  <label for="fprivate" style="text-transform:none;font-size:0.85rem;color:var(--muted);cursor:pointer;letter-spacing:0;">
+    🔒 Share this idea privately — don't publish it
+  </label>
+</div>
+<button type="submit" class="btn btn-primary">Send Message →</button>
           <div class="form-success" id="formSuccess">✓ Message received — I'll be in touch soon.</div>
         </form>
       </div>
@@ -808,16 +814,40 @@
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     // ── FORM ──
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = document.getElementById('fname').value.trim();
-      const email = document.getElementById('femail').value.trim();
-      if (!name || !email) { alert('Please fill in your name and email.'); return; }
-      const success = document.getElementById('formSuccess');
-      success.style.display = 'block';
-      this.reset();
-      setTimeout(() => success.style.display = 'none', 4000);
+   document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('fname').value.trim();
+  const email = document.getElementById('femail').value.trim();
+  if (!name || !email) { alert('Please fill in your name and email.'); return; }
+
+  const btn = this.querySelector('button[type="submit"]');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const formData = {
+    name,
+    email,
+    topic: document.getElementById('ftopic').value,
+    message: document.getElementById('fmessage').value,
+    private: document.getElementById('fprivate').checked ? 'Yes — keep private' : 'No — can be shared'
+  };
+
+  try {
+    await fetch('https://formspree.io/f/mojrearv', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
     });
+    document.getElementById('formSuccess').style.display = 'block';
+    this.reset();
+    setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+  } catch {
+    alert('Something went wrong. Please try again.');
+  }
+
+  btn.textContent = 'Send Message →';
+  btn.disabled = false;
+});
   </script>
 </body>
 </html>
