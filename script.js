@@ -56,6 +56,12 @@ const essayPageSubmitMessage = document.getElementById('essayPageSubmitMessage')
 const essayPageNotFound = document.getElementById('essayPageNotFound');
 const relatedEssaysGrid = document.getElementById('relatedEssays');
 const scrollProgressFill = document.getElementById('scrollProgressFill');
+const ideaModalRating = document.getElementById('ideaModalRating');
+const ideaModalRatingLabel = document.getElementById('ideaModalRatingLabel');
+const ideaRatingSubmit = document.getElementById('ideaRatingSubmit');
+const ideaModalEmail = document.getElementById('ideaModalEmail');
+const ideaRatingSubmitMessage = document.getElementById('ideaRatingSubmitMessage');
+const ratingBlock = document.getElementById('ratingBlock');
 
 async function createIdeaCards() {
   const ideasGrid = document.querySelector(".ideas-grid");
@@ -109,7 +115,7 @@ async function createIdeaCards() {
     ideasGrid.innerHTML = '';
     ideaCount.textContent = String(ideas.length);
 
-    ideas.forEach((idea) => {
+    ideas.forEach((idea, index) => {
       const card = document.createElement('div');
       card.className = 'idea-card reveal visible';
       card.dataset.category = idea.category;
@@ -134,7 +140,7 @@ async function createIdeaCards() {
       arrowDiv.textContent = '→';
       card.appendChild(arrowDiv);
 
-      card.addEventListener('click', () => openModal(idea));
+      card.addEventListener('click', () => openModal(idea, index));
       ideasGrid.appendChild(card);
     });
 
@@ -185,13 +191,17 @@ function openRandomIdea() {
   setTimeout(() => randomCard.click(), 400);
 }
 
-function openModal(idea) {
+let currentIdeaIndex = null;
+
+function openModal(idea, index) {
   if (!modalOverlay) return;
+  currentIdeaIndex = index;
   document.getElementById('modalTag').textContent = idea.tag;
   document.getElementById('modalTitle').textContent = idea.title;
   document.getElementById('modalBody').textContent = idea.full;
   document.getElementById('modalStatus').textContent = idea.status;
   document.getElementById('shareCopied').classList.remove('visible');
+  initIdeaModalRating(index);
   modalOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -203,11 +213,15 @@ function closeModal() {
 }
 
 function shareIdea() {
-  const url = window.location.href.split('#')[0] + '#ideas';
+  const baseUrl = window.location.href.split('#')[0];
+  const ideaParam = currentIdeaIndex !== null ? `?idea=${currentIdeaIndex}` : '';
+  const url = `${baseUrl}#ideas${ideaParam}`;
   navigator.clipboard.writeText(url).then(() => {
     const msg = document.getElementById('shareCopied');
-    msg.classList.add('visible');
-    setTimeout(() => msg.classList.remove('visible'), 2500);
+    if (msg) {
+      msg.classList.add('visible');
+      setTimeout(() => msg.classList.remove('visible'), 2500);
+    }
   });
 }
 
@@ -380,6 +394,58 @@ async function submitEssayRating() {
   essayPageRatingSubmit.disabled = false;
 }
 
+function initIdeaModalRating(idx) {
+  if (!ideaModalRating || !ideaModalRatingLabel || !ratingBlock) return;
+  ratingBlock.classList.remove('rating-hidden');
+  const rating = loadRating('idea', idx);
+  ideaModalRating.value = rating;
+  ideaModalRatingLabel.textContent = getRatingLabel(rating);
+  if (ideaModalEmail) ideaModalEmail.value = '';
+  if (ideaRatingSubmitMessage) ideaRatingSubmitMessage.textContent = '';
+  ideaModalRating.oninput = e => {
+    const value = e.target.value;
+    ideaModalRatingLabel.textContent = getRatingLabel(value);
+    saveRating('idea', idx, value);
+  };
+}
+
+async function submitIdeaRating() {
+  if (!ideaModalRating || !ideaRatingSubmit || currentIdeaIndex === null) return;
+  const rating = ideaModalRating.value;
+  const messageEl = ideaRatingSubmitMessage;
+  const email = ideaModalEmail?.value.trim() || '';
+  if (rating === '' || rating === null || rating === undefined) {
+    if (messageEl) messageEl.textContent = 'Please select a rating.';
+    return;
+  }
+  ideaRatingSubmit.textContent = 'Sending...';
+  ideaRatingSubmit.disabled = true;
+  if (messageEl) messageEl.textContent = '';
+  const formData = {
+    type: 'idea',
+    index: currentIdeaIndex,
+    rating: Number(rating),
+    email: email,
+    timestamp: new Date().toISOString()
+  };
+  try {
+    const response = await fetch('https://formspree.io/f/xwplweyw', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    if (response.ok) {
+      if (messageEl) messageEl.textContent = 'Thanks! Your rating has been recorded.';
+    } else {
+      throw new Error('Formspree error');
+    }
+  } catch (error) {
+    if (messageEl) messageEl.textContent = 'Unable to send rating. Please try again.';
+  }
+  ideaRatingSubmit.textContent = 'Submit rating';
+  ideaRatingSubmit.disabled = false;
+}
+
 async function renderRelatedEssays(currentId) {
   if (!relatedEssaysGrid) return;
   relatedEssaysGrid.innerHTML = '';
@@ -536,6 +602,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (essayPageRatingSubmit) {
     essayPageRatingSubmit.addEventListener('click', submitEssayRating);
+  }
+
+  if (ideaRatingSubmit) {
+    ideaRatingSubmit.addEventListener('click', submitIdeaRating);
   }
 
   if (modalClose) {
