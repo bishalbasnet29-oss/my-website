@@ -395,8 +395,10 @@ body.light .essay-page blockquote {
 }
 .ideas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 .idea-card {
   background: var(--bg);
@@ -406,6 +408,8 @@ body.light .essay-page blockquote {
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 .idea-card::before {
   content: '';
@@ -452,6 +456,25 @@ body.light .essay-page blockquote {
 .idea-card:hover .card-arrow {
   opacity: 1;
   transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+  .ideas-grid {
+    grid-template-columns: 1fr;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .idea-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.5rem;
+  }
+  .card-title {
+    font-size: 1.15rem;
+  }
+  .card-desc {
+    font-size: 0.85rem;
+  }
 }
 .rating-block {
   margin-top: 1.5rem;
