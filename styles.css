@@ -192,7 +192,7 @@ nav.scrolled {
 .nav-logo svg {
   display: block;
   width: auto;
-  height: 40px;
+  height: 46px;
   max-width: 100%;
 }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
@@ -1007,6 +1007,14 @@ body.light .essay-rating .rating-email {
   font-size: 2rem;
   color: var(--accent2);
 }
+.about-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 20px rgba(201, 245, 66, 0.08);
+}
 .about-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1132,7 +1140,7 @@ footer {
   .about-visual { display: none; }
   .contact-wrap { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
-  .nav-logo svg { height: 30px; }
+  .nav-logo svg { height: 34px; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   .essay-full { padding: 2rem 1.5rem; }
   .nav-links { gap: 1rem; }

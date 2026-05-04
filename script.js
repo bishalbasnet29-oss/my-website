@@ -55,6 +55,7 @@ const essayPageEmail = document.getElementById('essayPageEmail');
 const essayPageSubmitMessage = document.getElementById('essayPageSubmitMessage');
 const essayPageNotFound = document.getElementById('essayPageNotFound');
 const relatedEssaysGrid = document.getElementById('relatedEssays');
+const scrollProgressFill = document.getElementById('scrollProgressFill');
 
 async function createIdeaCards() {
   const ideasGrid = document.querySelector(".ideas-grid");
@@ -468,6 +469,12 @@ function initNavbarScroll() {
   if (!navbar) return;
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 60);
+    if (scrollProgressFill) {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      scrollProgressFill.style.width = scrollPercent + '%';
+    }
   });
 }
 
