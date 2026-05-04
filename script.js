@@ -478,39 +478,42 @@ function closeEssay() {
   document.body.style.overflow = '';
 }
 
-if (ideasGrid) {
-  createIdeaCards();
-  if (document.getElementById('randomBtn')) {
-    document.getElementById('randomBtn').addEventListener('click', openRandomIdea);
+document.addEventListener('DOMContentLoaded', () => {
+  if (ideasGrid) {
+    createIdeaCards();
+    const randomBtn = document.getElementById('randomBtn');
+    if (randomBtn) {
+      randomBtn.addEventListener('click', openRandomIdea);
+    }
   }
-}
 
-if (essaysGrid) {
-  renderEssayCards();
-}
+  if (essaysGrid) {
+    renderEssayCards();
+  }
 
-if (essayPageTitle) {
-  renderEssayPage();
-}
+  if (essayPageTitle) {
+    renderEssayPage();
+  }
 
-if (essayPageRatingSubmit) {
-  essayPageRatingSubmit.addEventListener('click', submitEssayRating);
-}
+  if (essayPageRatingSubmit) {
+    essayPageRatingSubmit.addEventListener('click', submitEssayRating);
+  }
 
-if (modalClose) {
-  modalClose.addEventListener('click', closeModal);
-}
+  if (modalClose) {
+    modalClose.addEventListener('click', closeModal);
+  }
 
-if (modalOverlay) {
-  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
-}
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  }
 
-if (essayClose) {
-  essayClose.addEventListener('click', closeEssay);
-}
+  if (essayClose) {
+    essayClose.addEventListener('click', closeEssay);
+  }
 
-initTheme();
-initNavbarScroll();
-initRevealObserver();
-initEscClose();
-initContactForm();
+  initTheme();
+  initNavbarScroll();
+  initRevealObserver();
+  initEscClose();
+  initContactForm();
+});
