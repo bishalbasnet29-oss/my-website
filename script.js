@@ -57,6 +57,7 @@ const essayPageNotFound = document.getElementById('essayPageNotFound');
 const relatedEssaysGrid = document.getElementById('relatedEssays');
 
 async function createIdeaCards() {
+  const ideasGrid = document.querySelector(".ideas-grid");
   if (!ideasGrid) return;
 
   console.log('createIdeaCards called');
@@ -111,12 +112,27 @@ async function createIdeaCards() {
       const card = document.createElement('div');
       card.className = 'idea-card reveal';
       card.dataset.category = idea.category;
-      card.innerHTML = `
-        <div class="card-tag">${idea.tag}</div>
-        <div class="card-title">${idea.title}</div>
-        <div class="card-desc">${idea.desc}</div>
-        <div class="card-arrow">→</div>
-      `;
+
+      const tagDiv = document.createElement('div');
+      tagDiv.className = 'card-tag';
+      tagDiv.textContent = idea.tag;
+      card.appendChild(tagDiv);
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'card-title';
+      titleDiv.textContent = idea.title;
+      card.appendChild(titleDiv);
+
+      const descDiv = document.createElement('div');
+      descDiv.className = 'card-desc';
+      descDiv.textContent = idea.desc;
+      card.appendChild(descDiv);
+
+      const arrowDiv = document.createElement('div');
+      arrowDiv.className = 'card-arrow';
+      arrowDiv.textContent = '→';
+      card.appendChild(arrowDiv);
+
       card.addEventListener('click', () => openModal(idea));
       ideasGrid.appendChild(card);
     });
