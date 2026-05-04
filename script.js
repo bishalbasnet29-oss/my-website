@@ -110,7 +110,7 @@ async function createIdeaCards() {
 
     ideas.forEach((idea) => {
       const card = document.createElement('div');
-      card.className = 'idea-card reveal';
+      card.className = 'idea-card reveal visible';
       card.dataset.category = idea.category;
 
       const tagDiv = document.createElement('div');
