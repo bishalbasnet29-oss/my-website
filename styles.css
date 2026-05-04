@@ -176,11 +176,24 @@ nav.scrolled {
   transition: width 0.2s ease;
 }
 .nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.45rem;
-  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
   color: var(--accent);
   text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-logo:hover {
+  transform: scale(1.05);
+  opacity: 0.95;
+}
+.nav-logo svg {
+  display: block;
+  width: auto;
+  height: 40px;
+  max-width: 100%;
 }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
 .nav-links a {
@@ -1119,6 +1132,7 @@ footer {
   .about-visual { display: none; }
   .contact-wrap { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
+  .nav-logo svg { height: 30px; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   .essay-full { padding: 2rem 1.5rem; }
   .nav-links { gap: 1rem; }
