@@ -59,6 +59,8 @@ const relatedEssaysGrid = document.getElementById('relatedEssays');
 async function createIdeaCards() {
   if (!ideasGrid) return;
 
+  console.log('createIdeaCards called');
+
   ideasGrid.innerHTML = `
     <div class="idea-card skeleton">
       <div class="skeleton-line"></div>
@@ -83,12 +85,24 @@ async function createIdeaCards() {
     Authorization: 'Bearer sb_publishable_5rJ67suG6H7LmFrRDeUM7w_MAkGgzLD'
   };
 
+  console.log('IDEAS QUERY URL:', url);
+
   try {
     const response = await fetch(url, { headers });
     if (!response.ok) {
       throw new Error(`Fetch failed with status ${response.status}`);
     }
     const ideas = await response.json();
+
+    console.log('IDEAS DATA:', ideas);
+    if (!Array.isArray(ideas)) {
+      console.error('IDEAS ERROR: expected an array from Supabase, got:', ideas);
+      throw new Error('Unexpected ideas response shape');
+    }
+    if (ideas.length > 0) {
+      console.log('IDEAS FIRST ITEM KEYS:', Object.keys(ideas[0]));
+      console.log('IDEAS FIRST ITEM SAMPLE:', { title: ideas[0].title, desc: ideas[0].desc, full: ideas[0].full, tag: ideas[0].tag });
+    }
 
     ideasGrid.innerHTML = '';
     ideaCount.textContent = String(ideas.length);
@@ -109,6 +123,7 @@ async function createIdeaCards() {
 
     setupFilters();
   } catch (error) {
+    console.log('IDEAS ERROR:', error);
     ideasGrid.innerHTML = `<div class="grid-error" style="color: var(--muted); font-size: 0.9rem; padding: 2rem;">Couldn't load ideas — try refreshing.</div>`;
   }
 }
@@ -479,6 +494,7 @@ function closeEssay() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded fired');
   if (ideasGrid) {
     createIdeaCards();
     const randomBtn = document.getElementById('randomBtn');
