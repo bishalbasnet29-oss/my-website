@@ -116,6 +116,22 @@ body.essay-page-background:not(.light) .essay-page blockquote {
   100% { background-position: 0% 40%; }
 }
 
+.skeleton { pointer-events: none; cursor: default; }
+.skeleton-line {
+  background: #2a2a2a;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+.skeleton-line:nth-child(1) { height: 20px; width: 30%; }
+.skeleton-line:nth-child(2) { height: 28px; width: 85%; }
+.skeleton-line:nth-child(3) { height: 60px; width: 100%; }
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+}
+.grid-error { color: var(--muted); font-size: 0.9rem; padding: 2rem 0; }
+
 /* ── NOISE OVERLAY ── */
 body::before {
   content: '';
