@@ -23,7 +23,8 @@ body.light {
   --text: #27221c;
   --muted: #5e554d;
 }
-body.light .nav-logo { color: #4a6200; text-decoration: none; }
+body.light .nav-logo,
+body.light .nav-logo:hover { color: #4f6322 !important; text-decoration: none; }
 body.light nav.scrolled { background: rgba(242,239,232,0.9); }
 body.light .idea-card:hover { background: #ebe5da; }
 body.light .hero-bg-text { -webkit-text-stroke: 1px #d0ccbf; }
@@ -1467,4 +1468,161 @@ html, body {
     transition: color 0.2s;
   }
   .mobile-menu ul a:hover { color: var(--accent); }
+}
+
+/* ── QUOTES WIDGET ── */
+.quotes-widget {
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42%;
+  max-width: 520px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 1.4s forwards;
+}
+
+.quotes-portrait-wrap {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+  background: var(--surface);
+}
+
+.quotes-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: opacity 0.5s ease;
+}
+
+.quotes-portrait-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--muted);
+}
+
+.quotes-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.quotes-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  line-height: 0.6;
+  color: var(--accent);
+  opacity: 0.4;
+  margin-bottom: 0.5rem;
+  user-select: none;
+}
+
+.quotes-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0 0 1rem;
+  border: none;
+  padding: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.quotes-text.fading {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.quotes-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  transition: opacity 0.5s ease;
+}
+
+.quotes-meta.fading { opacity: 0; }
+
+.quotes-author {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.quotes-source {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+.quotes-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.quotes-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  border: none;
+  padding: 0;
+}
+
+.quotes-dot.active {
+  background: var(--accent);
+  transform: scale(1.4);
+}
+
+.quotes-dot:hover { background: var(--muted); }
+
+/* Light mode adjustments */
+body.light .quotes-mark { opacity: 0.3; }
+body.light .quotes-text { color: var(--text); }
+
+/* Responsive — hide on mobile, show stacked on tablet */
+@media (max-width: 1024px) {
+  .quotes-widget {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.6s forwards;
+  }
+}
+
+@media (max-width: 600px) {
+  .quotes-widget {
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .quotes-portrait-wrap {
+    width: 52px;
+    height: 52px;
+  }
+  .quotes-mark { font-size: 2.8rem; }
+  .quotes-text { font-size: 0.88rem; }
 }

@@ -617,6 +617,101 @@ function closeEssay() {
   document.body.style.overflow = '';
 }
 
+// ── QUOTES WIDGET ──
+let quotesData = [];
+let currentQuoteIndex = 0;
+let quoteInterval = null;
+
+async function fetchQuotes() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/quotes?select=*&is_active=eq.true&order=sort_order.asc`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!res.ok) return;
+    quotesData = await res.json();
+    if (quotesData.length > 0) renderQuotesWidget();
+  } catch { /* silent fail — widget just won't show */ }
+}
+
+function renderQuotesWidget() {
+  const widget = document.getElementById('quotesWidget');
+  if (!widget || !quotesData.length) return;
+
+  buildQuoteDots();
+  showQuote(0);
+  quoteInterval = setInterval(() => {
+    const next = (currentQuoteIndex + 1) % quotesData.length;
+    transitionToQuote(next);
+  }, 6000);
+}
+
+function buildQuoteDots() {
+  const dots = document.getElementById('quotesDots');
+  if (!dots) return;
+  dots.innerHTML = '';
+  quotesData.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'quotes-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Quote ${i + 1}`);
+    dot.addEventListener('click', () => {
+      clearInterval(quoteInterval);
+      transitionToQuote(i);
+      quoteInterval = setInterval(() => {
+        const next = (currentQuoteIndex + 1) % quotesData.length;
+        transitionToQuote(next);
+      }, 6000);
+    });
+    dots.appendChild(dot);
+  });
+}
+
+function showQuote(index) {
+  const q = quotesData[index];
+  if (!q) return;
+  currentQuoteIndex = index;
+
+  const textEl = document.getElementById('quotesText');
+  const authorEl = document.getElementById('quotesAuthor');
+  const sourceEl = document.getElementById('quotesSource');
+  const portraitEl = document.getElementById('quotesPortrait');
+  const placeholderEl = document.getElementById('quotesPortraitPlaceholder');
+
+  if (textEl) textEl.textContent = q.quote;
+  if (authorEl) authorEl.textContent = q.author;
+  if (sourceEl) sourceEl.textContent = q.source ? `— ${q.source}` : '';
+
+  if (portraitEl && placeholderEl) {
+    if (q.portrait_url) {
+      portraitEl.src = q.portrait_url;
+      portraitEl.alt = q.author;
+      portraitEl.style.opacity = '1';
+      placeholderEl.style.display = 'none';
+    } else {
+      portraitEl.src = '';
+      portraitEl.style.opacity = '0';
+      placeholderEl.style.display = 'flex';
+    }
+  }
+
+  document.querySelectorAll('.quotes-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+}
+
+function transitionToQuote(index) {
+  const textEl = document.getElementById('quotesText');
+  const metaEl = document.querySelector('.quotes-meta');
+  const portraitEl = document.getElementById('quotesPortrait');
+
+  [textEl, metaEl, portraitEl].forEach(el => el?.classList.add('fading'));
+
+  setTimeout(() => {
+    showQuote(index);
+    [textEl, metaEl, portraitEl].forEach(el => el?.classList.remove('fading'));
+  }, 500);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOMContentLoaded fired');
   if (ideasGrid) {
@@ -661,4 +756,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initEscClose();
   initContactForm();
   initHamburger();
+  if (document.getElementById('quotesWidget')) fetchQuotes();
 });
