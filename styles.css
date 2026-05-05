@@ -964,6 +964,7 @@ body.light .essay-rating .rating-email {
   color: var(--text);
 }
 #about {
+  background: var(--surface);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
@@ -1038,7 +1039,7 @@ body.light .essay-rating .rating-email {
 }
 
 /* ── CONTACT ── */
-#contact { background: var(--surface); }
+#contact { background: var(--bg); }
 .contact-wrap {
   display: grid;
   grid-template-columns: 1fr 1fr;
