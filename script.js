@@ -108,6 +108,7 @@ const essayPageEmail = document.getElementById('essayPageEmail');
 const essayPageSubmitMessage = document.getElementById('essayPageSubmitMessage');
 const essayPageNotFound = document.getElementById('essayPageNotFound');
 const relatedEssaysGrid = document.getElementById('relatedEssays');
+const relatedEssaysSection = document.getElementById('relatedEssaysSection');
 const scrollProgressFill = document.getElementById('scrollProgressFill');
 const ideaModalRating = document.getElementById('ideaModalRating');
 const ideaModalRatingLabel = document.getElementById('ideaModalRatingLabel');
@@ -375,13 +376,8 @@ async function renderEssayPage() {
       }
     }
 
+    await fetchEssays();
     await renderRelatedEssays(essay.id);
-
-    try {
-      await fetchEssays();
-    } catch {
-      // ignore; related essays already loaded if possible
-    }
 
     const idx = essays.findIndex(e => String(e.id) === String(essay.id));
     initEssayPageRating(idx >= 0 ? idx : 0);
@@ -486,6 +482,14 @@ async function renderRelatedEssays(currentId) {
   }
 
   const related = essays.filter(e => String(e.id) !== String(currentId)).slice(0, 3);
+
+  if (related.length === 0) {
+    if (relatedEssaysSection) relatedEssaysSection.style.display = 'none';
+    return;
+  }
+
+  if (relatedEssaysSection) relatedEssaysSection.style.display = '';
+
   related.forEach((essay) => {
     const card = document.createElement('a');
     card.className = 'essay-card reveal';
