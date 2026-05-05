@@ -10,6 +10,39 @@
 // ═══════════════════════════════════════════════════════════════════
 let essays = [];
 
+// ═══════════════════════════════════════════════════
+// ── SUPABASE CONFIG ──
+// ═══════════════════════════════════════════════════
+const SUPABASE_URL = 'https://bhtlygnyjkavfymuyypx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_5rJ67suG6H7LmFrRDeUM7w_MAkGgzLD';
+const SUPABASE_HEADERS = {
+  apikey: SUPABASE_KEY,
+  Authorization: `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  Prefer: 'return=minimal'
+};
+
+// ── Save rating to Supabase ratings table (future-proof: works for any idea/essay by ID)
+// Table needed: ratings (id, type TEXT, item_id TEXT, rating INT, email TEXT, created_at TIMESTAMPTZ)
+async function saveRatingToSupabase(type, itemId, rating, email) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/ratings`, {
+      method: 'POST',
+      headers: SUPABASE_HEADERS,
+      body: JSON.stringify({
+        type,           // 'idea' or 'essay'
+        item_id: String(itemId),
+        rating: Number(rating),
+        email: email || null,
+        created_at: new Date().toISOString()
+      })
+    });
+    return res.ok || res.status === 201;
+  } catch {
+    return false;
+  }
+}
+
 function getRatingKey(type, index) {
   return `rating_${type}_${index}`;
 }
@@ -21,6 +54,26 @@ function loadRating(type, index) {
 
 function saveRating(type, index, value) {
   localStorage.setItem(getRatingKey(type, index), String(value));
+}
+
+// ── HAMBURGER MENU ──
+function closeMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu) menu.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function initHamburger() {
+  const hamburger = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  if (!hamburger || !menu) return;
+  hamburger.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
 }
 
 function getRatingLabel(value) {
@@ -362,32 +415,19 @@ async function submitEssayRating() {
     if (messageEl) messageEl.textContent = 'Please choose a rating before submitting.';
     return;
   }
-  const label = getRatingLabel(rating);
   const essayId = getEssayIdFromUrl();
-  const idx = essays.findIndex(e => String(e.id) === essayId);
-  const essay = essays[idx] || {};
   essayPageRatingSubmit.textContent = 'Sending...';
   essayPageRatingSubmit.disabled = true;
   if (messageEl) messageEl.textContent = '';
 
-  const formData = {
-    email: email || 'no-reply@ideavault.com',
-    _replyto: email || 'no-reply@ideavault.com',
-    name: essay.title || 'Essay rating',
-    topic: `Essay rating: ${essay.title || 'Unknown'}`,
-    message: `Rating: ${rating} (${label})\nEssay: ${essay.title || 'Unknown'}\nDate: ${essay.date_label || 'Unknown'}\nEmail: ${email || 'Not provided'}`,
-    private: 'Essay rating submission'
-  };
-
-  try {
-    await fetch('https://formspree.io/f/mojrearv', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    if (messageEl) messageEl.textContent = 'Rating sent — thank you!';
-  } catch {
-    if (messageEl) messageEl.textContent = 'Unable to send rating. Please try again.';
+  // Save to Supabase — item_id is the essay's actual DB id (fully future-proof)
+  const ok = await saveRatingToSupabase('essay', essayId, rating, email);
+  if (ok) {
+    if (messageEl) messageEl.textContent = '✓ Rating recorded — thank you!';
+    const idx = essays.findIndex(e => String(e.id) === String(essayId));
+    if (idx >= 0) saveRating('essay', idx, rating);
+  } else {
+    if (messageEl) messageEl.textContent = 'Unable to save rating. Please try again.';
   }
 
   essayPageRatingSubmit.textContent = 'Submit rating';
@@ -421,27 +461,16 @@ async function submitIdeaRating() {
   ideaRatingSubmit.textContent = 'Sending...';
   ideaRatingSubmit.disabled = true;
   if (messageEl) messageEl.textContent = '';
-  const formData = {
-    type: 'idea',
-    index: currentIdeaIndex,
-    rating: Number(rating),
-    email: email,
-    timestamp: new Date().toISOString()
-  };
-  try {
-    const response = await fetch('https://formspree.io/f/xwplweyw', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    if (response.ok) {
-      if (messageEl) messageEl.textContent = 'Thanks! Your rating has been recorded.';
-    } else {
-      throw new Error('Formspree error');
-    }
-  } catch (error) {
-    if (messageEl) messageEl.textContent = 'Unable to send rating. Please try again.';
+
+  // Save to Supabase — item_id is the idea's index (works for any new idea you add)
+  const ok = await saveRatingToSupabase('idea', currentIdeaIndex, rating, email);
+  if (ok) {
+    if (messageEl) messageEl.textContent = '✓ Rating recorded — thank you!';
+    saveRating('idea', currentIdeaIndex, rating); // also cache locally
+  } else {
+    if (messageEl) messageEl.textContent = 'Unable to save rating. Please try again.';
   }
+
   ideaRatingSubmit.textContent = 'Submit rating';
   ideaRatingSubmit.disabled = false;
 }
@@ -625,4 +654,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initRevealObserver();
   initEscClose();
   initContactForm();
+  initHamburger();
 });

@@ -36,10 +36,23 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode">☀️</button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
     <div class="scroll-progress-bar">
       <div class="scroll-progress-fill" id="scrollProgressFill"></div>
     </div>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#ideas" onclick="closeMobileMenu()">Ideas</a></li>
+      <li><a href="#blog" onclick="closeMobileMenu()">Essays</a></li>
+      <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+      <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
+    </ul>
+  </div>
 
   <!-- HERO -->
   <section class="hero" id="home">
@@ -238,4 +251,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
