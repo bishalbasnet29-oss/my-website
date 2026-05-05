@@ -1146,7 +1146,6 @@ footer {
   .nav-logo svg { height: 34px; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   .essay-full { padding: 2rem 1.5rem; }
-  .nav-links { gap: 1rem; }
 }
 
 /* ═══════════════════════════════════════════
@@ -1448,7 +1447,6 @@ html, body {
 @media (max-width: 900px) {
   .hamburger { display: flex; }
   .mobile-menu { display: block; }
-}
   .mobile-menu ul {
     list-style: none;
     display: flex;
@@ -1464,3 +1462,4 @@ html, body {
     transition: color 0.2s;
   }
   .mobile-menu ul a:hover { color: var(--accent); }
+}
