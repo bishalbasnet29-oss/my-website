@@ -507,6 +507,8 @@ async function renderRelatedEssays(currentId) {
     `;
     relatedEssaysGrid.appendChild(card);
   });
+  document.querySelectorAll('.related-essays-grid .essay-card')
+    .forEach(el => el.classList.add('visible'));
 }
 
 function initContactForm() {
