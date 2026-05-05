@@ -23,7 +23,7 @@ body.light {
   --text: #27221c;
   --muted: #5e554d;
 }
-body.light .nav-logo { color: var(--accent); text-decoration: none; }
+body.light .nav-logo { color: #4a6200; text-decoration: none; }
 body.light nav.scrolled { background: rgba(242,239,232,0.9); }
 body.light .idea-card:hover { background: #ebe5da; }
 body.light .hero-bg-text { -webkit-text-stroke: 1px #d0ccbf; }
